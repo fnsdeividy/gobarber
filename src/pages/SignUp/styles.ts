@@ -49,12 +49,13 @@ export const Content = styled.div `
         text-decoration: none;
         margin-top: 24px;
         transition: color 0.2s;
+        cursor: pointer;
 
         display: flex;
         align-items: center;
 
         &:hover {
-                color: ${shade(0.2, "#F4EDE8")} ;
+                color: ${shade(0.2, "#ff9000")} ;
             }
             
 

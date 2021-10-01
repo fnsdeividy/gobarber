@@ -4,15 +4,22 @@ import { Container, Content, Background } from './styles'
 import logoImg from '../../assets/logo.svg'
 import Input from "../../components/Input";
 import Button from "../../components/Button";
+import { Form } from "@unform/web";
 
-const SignUp: React.FC = () => (
-    <Container>
+const SignUp: React.FC = () => {
+    function handleSubmit(data:object):void {
+        console.log(data)
+    }
+    
+    
+    return (
+        <Container>
         <Background/>
         <Content> 
         
 
         <img src={logoImg}alt="Gobarber"></img>
-        <form>
+        <Form onSubmit={handleSubmit}>
             
             <h1>Faça seu Cadastro</h1>
             <Input 
@@ -35,7 +42,7 @@ const SignUp: React.FC = () => (
             />
             <Button type="submit"> Cadastrar </Button>
             
-        </form>
+        </Form>
         
         <a>
             <FiArrowLeft/>
@@ -45,6 +52,8 @@ const SignUp: React.FC = () => (
 
        
     </Container>
-);
+    );
+};
+
 
 export default SignUp;
