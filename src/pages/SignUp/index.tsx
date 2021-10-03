@@ -1,6 +1,7 @@
 import React, { useCallback, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { FiArrowLeft, FiMail,FiUser, FiLock } from 'react-icons/fi';
+import api from "../../services/ApiClient";
 import { Container, Content, Background, AnimationContainer } from './styles';
 import logoImg from '../../assets/logo.svg';
 import Input from "../../components/Input";
@@ -9,11 +10,20 @@ import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
 import * as Yup from 'yup'
 import getValidationErrors from "../../utils/getValidationErrors";
+import { useToast } from '../../hooks/Toast'
+
+interface SignUpFormData {
+    name: string;
+    email: string;
+    password: string
+}
 
 
 const SignUp: React.FC = () => {
+    const { addToast } = useToast()
+    const  history  = useHistory()
     const formRef = useRef<FormHandles>(null)
-    const handleSubmit= useCallback( async (data:object)=> {
+    const handleSubmit= useCallback( async (data:SignUpFormData)=> {
         try {
 
            formRef.current?.setErrors({})
@@ -30,15 +40,31 @@ const SignUp: React.FC = () => {
             await schema.validate(data, {
                  abortEarly:false,
             })
+
+            await api.post('/users', data);
+
+            history.push('/')
            
-            
+            addToast({
+                type:'success',
+                title:'Cadastro Realizado',
+                description: 'Você já pode fazer seu Logon'
+            })
         } catch (err:any)  {
            
-           const errors = getValidationErrors(err);
-           formRef.current?.setErrors(errors)
-            
-        }
-    }, []);
+            if(err instanceof Yup.ValidationError) {
+                const errors = getValidationErrors(err);
+                
+                formRef.current?.setErrors(errors)
+               }
+               
+                addToast({
+                    type:'error',
+                    title:'Erro no cadastro',
+                    description:'Ocorreu um erro no cadastro. Tente novamente'
+                })
+            }
+        }, [ addToast, history]);
     
    
     
