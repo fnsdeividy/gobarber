@@ -14,9 +14,9 @@ const ToastContainer: React.FC<ToastContainerProps> = ({ messages }) => {
     const messagesWithTransitions = useTransition(
       messages, (message) => message.id,  
       {
-        from: { right:'-120%',transform: 'rotateY(0deg)' },
-        enter: { right: '0%',transform: 'rotateY(360deg)' },
-        leave: { right: '-120%', transform: 'rotateY(0deg)' }
+        from: { right:'-120%',transform: 'rotateZ(0deg)' },
+        enter: { right: '0%',transform: 'rotateZ(360deg)' },
+        leave: { right: '-120%', transform: 'rotateZ(0deg)' }
       }
     
     )
