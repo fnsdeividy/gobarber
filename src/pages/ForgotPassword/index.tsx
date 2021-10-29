@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { FiLogIn, FiMail } from "react-icons/fi";
 import { Container, Content, Background, AnimationContainer } from "./styles";
@@ -10,6 +10,7 @@ import Input from "../../components/Input";
 import Button from "../../components/Button";
 import * as Yup from "yup";
 import { useToast } from "../../hooks/Toast";
+import api from "../../services/ApiClient";
 
 interface ForgotPasswordFormData {
   email: string;
@@ -17,13 +18,14 @@ interface ForgotPasswordFormData {
 }
 
 const ForgotPassword: React.FC = () => {
+  const [loading, setLoading] = useState(false);
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
-  
 
   const handleSubmit = useCallback(
     async (data: ForgotPasswordFormData) => {
       try {
+        setLoading(true);
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
@@ -37,6 +39,17 @@ const ForgotPassword: React.FC = () => {
         });
 
         //recuperção de senha
+
+        await api.post("/password/forgot", {
+          email: data.email,
+        });
+
+        addToast({
+          type: "success",
+          title: "E-mail de recuperação enviado",
+          description:
+            "Enviamos um E-mail para confirmar sua recuperação de senha, cheque sua caixa de entrada.",
+        });
 
         //history.push("/dashboard");
       } catch (err: any) {
@@ -52,6 +65,8 @@ const ForgotPassword: React.FC = () => {
           description:
             "Ocorreu um erro na recuperação de sua senha, cheque as credenciais",
         });
+      } finally {
+        setLoading(false);
       }
     },
     [addToast /*history*/]
@@ -71,7 +86,9 @@ const ForgotPassword: React.FC = () => {
               placeholder="E-mail"
             />
 
-            <Button type="submit">Recuperar</Button>
+            <Button loading={loading} type="submit">
+              Recuperar
+            </Button>
           </Form>
           <Link to="/signin">
             <FiLogIn />
