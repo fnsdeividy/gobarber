@@ -11,6 +11,8 @@ import {
     Calendar,
     Appointment 
 } from "./styles";
+import { isToday, format } from 'date-fns'
+import ptBr from 'date-fns/locale/pt-BR'
 import LogoImg from "../../assets/logo.svg";
 import DayPicker, { DayModifiers } from "react-day-picker";
 import  'react-day-picker/lib/style.css'
@@ -24,12 +26,22 @@ interface MonthAvailabilityItem {
   available: boolean
 }
 
+interface Appointment {
+  id: string;
+  date: string;
+  user: {
+    name:string;
+    avatar_url:string;
+  }
+}
+
 
 const Dashboard: React.FC = () => {
   const { signOut, user } = useAuth();
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [monthAvailability, setMonthAvailability] = useState<MonthAvailabilityItem[]>([])
+  const [appointments, setAppointments] = useState<Appointment[]>([])
 
   const handleDateChange = useCallback((day:Date, modifiers:DayModifiers ) => {
     if(modifiers.available){
@@ -53,6 +65,19 @@ const Dashboard: React.FC = () => {
     })
   },[currentMonth, user.id])
 
+  useEffect(() => {
+    api.get('/appointments/me', {
+      params: {
+        year: currentMonth.getFullYear(),
+        month: currentMonth.getMonth() + 1,
+        day: currentMonth.getDate(),
+      }
+    }).then(response => {
+      setAppointments(response.data)
+      console.log(response.data)
+    })
+  },[selectedDate,currentMonth ])
+
   const disableDays = useMemo(() => {
     const dates = monthAvailability.filter(monthDay => monthDay.available === false).map(monthDay => {
       const year = currentMonth.getFullYear();
@@ -61,6 +86,14 @@ const Dashboard: React.FC = () => {
     })
     return dates
   }, [currentMonth, monthAvailability])
+
+  const selectDateAsText = useMemo(() => {
+    return format(selectedDate, "'Dia' dd 'de 'MMMM", {locale: ptBr})
+  }, [selectedDate])
+
+  const selectWeekDay = useMemo(() => {
+    return format(selectedDate, 'cccc', { locale:ptBr })
+  },[selectedDate])
 
   return (
     <Container>
@@ -81,14 +114,14 @@ const Dashboard: React.FC = () => {
           </button>
         </HeaderContent>
       </Header>
-      <Content>
+      <Content> 
           <Schedule>
               
             <h1>Horários agendados</h1>
             <p>
-                <span>Hoje</span>
-                <span>dia 06</span>
-                <span>Segunda-feira</span>
+                {isToday(selectedDate) && <span>Hoje</span>}
+                <span>{selectDateAsText}</span>
+                <span>{selectWeekDay}</span>
             </p>
             <NextAppointment>
                 <strong>Atendimento a seguir</strong>
