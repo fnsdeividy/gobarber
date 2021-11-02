@@ -16,16 +16,7 @@ export const HeaderContent = styled.div`
   > img {
     height: 80px;
   }
-  button {
-    margin-left: auto;
-    background: transparent;
-    border: 0;
-    svg {
-      color: #999591;
-      width: 20px;
-      height: 20px;
-    }
-  }
+  
 `;
 
 export const Profile = styled.div`
@@ -45,12 +36,8 @@ export const Profile = styled.div`
     span {
       color: #f4ede8;
     }
-    a {
-      text-decoration: none;
+    strong {
       color: #ff9000;
-      &:hover {
-        opacity: 0.8;
-      }
     }
   }
 `;
@@ -282,4 +269,24 @@ export const NoAppointment = styled.div `
       color: #ff9000;
       font-size: 20px;
     }
+`;
+
+export const ButtonsInteractive = styled.div `
+  margin-left: auto;
+    
+    button {
+      margin-left: 25px ;
+      background: transparent;
+      border: 0; 
+    svg {
+      color: #999591;
+      width: 28px;
+      height: 30px;
+
+      &:hover {
+        color: #ff9000;
+      }
+    }
+  }
+  
 `;

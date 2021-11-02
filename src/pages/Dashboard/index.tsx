@@ -10,17 +10,19 @@ import {
     Section, 
     Calendar,
     Appointment,
-    NoAppointment 
+    NoAppointment,
+    ButtonsInteractive 
 } from "./styles";
 import { isToday, format, parseISO } from 'date-fns'
 import ptBr from 'date-fns/locale/pt-BR'
 import LogoImg from "../../assets/logo.svg";
 import DayPicker, { DayModifiers } from "react-day-picker";
 import  'react-day-picker/lib/style.css'
-import { FiClock, FiPower } from "react-icons/fi";
+import { FiClock, FiPower, FiUser } from "react-icons/fi";
 import { useAuth } from "../../hooks/Auth";
 import api from "../../services/ApiClient";
 import { isAfter } from "date-fns";
+import { Link } from "react-router-dom";
 
 
 interface MonthAvailabilityItem {
@@ -134,13 +136,21 @@ const Dashboard: React.FC = () => {
             alt={user.name} />
             <div>
               <span>Bem-vindo,</span>
-              <a href='/Profile'>{user.name}</a>
+              <strong>{user.name}</strong>
+              
             </div>
           </Profile>
-
-          <button type="button" onClick={signOut}>
-            <FiPower />
-          </button>
+          <ButtonsInteractive>
+            <Link to='/profile'>
+              <button type="button">
+                <FiUser title="Meu perfil"/>
+              </button>
+            </Link>
+              <button type="button" onClick={signOut}>
+                <FiPower title='Sair'/>
+              </button>
+          </ButtonsInteractive>
+          
         </HeaderContent>
       </Header>
       <Content> 
