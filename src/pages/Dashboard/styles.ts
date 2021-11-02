@@ -156,6 +156,7 @@ export const Appointment = styled.div`
     display: flex;
     align-items: center;
     color: #f4ede8;
+    width: 70px;
     svg {
       color: #ff9000;
       margin-right: 8px;
@@ -259,4 +260,26 @@ export const Calendar = styled.div`
     border-radius: 10px;
     color: #232129 !important;
   }
+`;
+export const NoAppointment = styled.div `
+    background: #3e3b47;
+    display: flex;
+    align-items: center;
+    padding: 40px 24px;
+    border-radius: 10px;
+    margin-top: 64px;
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      height: 80%;
+      width: 1px;
+      left: 0;
+      top: 10%;
+      background: #ff9000;
+    }
+    div {
+      color: #ff9000;
+      font-size: 20px;
+    }
 `;
